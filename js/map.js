@@ -48,7 +48,6 @@ function mapsInit(position) {
   if(lon_me < lon_ido - 0.0002){
     lon_me = lon_me + 0.0001;
   }
-
   console.log("自分", "lat=", lat_me, "lon=", lon_me);
   console.log("井戸", "lat=", lat_ido, "lon=", lon_ido);
 
