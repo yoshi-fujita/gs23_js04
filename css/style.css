@@ -23,6 +23,11 @@ a:visited{
     margin: 5px 2px;
 }
 
+.help{
+    margin: 10px;
+    line-height: 2;
+}
+
 .init p{
     padding: 10px;
 }
