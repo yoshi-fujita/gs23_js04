@@ -189,6 +189,7 @@
 
     <div id="myMap" style="width: 100vw; height: 100vh"></div>
 
+    <a class="help" href="https://github.com/yoshi-fujita/gs23_js04_kadai/blob/main/README.md" target="_blank" rel="noopener noreferrer">ヘルプ</a>
     <div class="input">
       <textarea id="text" cols="20" rows="4"></textarea>
       <button id="send">端る</button>
@@ -219,9 +220,6 @@
       } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
       // Your web app's Firebase configuration
       const firebaseConfig = {
-
-
-
 
 
 
@@ -288,7 +286,7 @@
           lon_me: lon_me,
           text: text,
         };
-        console.log(msg);
+        // console.log(msg);
         const newPostRef = push(dbRef);
         set(newPostRef, msg);
 
