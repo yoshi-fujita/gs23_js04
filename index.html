@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="G'sアカデミー課題 チャット" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" type="image/png" href="image/ido.png" />
+    <title>井戸端チャット</title>
+  </head>
+  <body>
+    <div class="init">
+      <p>アバターを選んでください。</p>
+      <div>
+        <input
+          type="image"
+          src="image/youngman_25.png"
+          alt=""
+          class="avatar"
+          id="m1"
+        />
+        <input
+          type="image"
+          src="image/youngman_26.png"
+          alt=""
+          class="avatar"
+          id="m2"
+        />
+        <input
+          type="image"
+          src="image/youngman_27.png"
+          alt=""
+          class="avatar"
+          id="m3"
+        />
+        <input
+          type="image"
+          src="image/youngman_28.png"
+          alt=""
+          class="avatar"
+          id="m4"
+        />
+        <input
+          type="image"
+          src="image/youngman_29.png"
+          alt=""
+          class="avatar"
+          id="m5"
+        />
+        <input
+          type="image"
+          src="image/youngman_30.png"
+          alt=""
+          class="avatar"
+          id="m6"
+        />
+        <input
+          type="image"
+          src="image/youngman_31.png"
+          alt=""
+          class="avatar"
+          id="m7"
+        />
+        <input
+          type="image"
+          src="image/youngman_32.png"
+          alt=""
+          class="avatar"
+          id="m8"
+        />
+        <input
+          type="image"
+          src="image/youngman_33.png"
+          alt=""
+          class="avatar"
+          id="m9"
+        />
+        <input
+          type="image"
+          src="image/youngman_34.png"
+          alt=""
+          class="avatar"
+          id="m10"
+        />
+        <input
+          type="image"
+          src="image/youngman_35.png"
+          alt=""
+          class="avatar"
+          id="m11"
+        />
+        <input
+          type="image"
+          src="image/youngman_36.png"
+          alt=""
+          class="avatar"
+          id="m12"
+        />
+      </div>
+      <div>
+        <input
+          type="image"
+          src="image/youngwoman_37.png"
+          alt=""
+          class="avatar"
+          id="w1"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_38.png"
+          alt=""
+          class="avatar"
+          id="w2"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_39.png"
+          alt=""
+          class="avatar"
+          id="w3"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_40.png"
+          alt=""
+          class="avatar"
+          id="w4"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_41.png"
+          alt=""
+          class="avatar"
+          id="w5"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_42.png"
+          alt=""
+          class="avatar"
+          id="w6"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_43.png"
+          alt=""
+          class="avatar"
+          id="w7"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_44.png"
+          alt=""
+          class="avatar"
+          id="w8"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_45.png"
+          alt=""
+          class="avatar"
+          id="w9"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_46.png"
+          alt=""
+          class="avatar"
+          id="w10"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_47.png"
+          alt=""
+          class="avatar"
+          id="w11"
+        />
+        <input
+          type="image"
+          src="image/youngwoman_48.png"
+          alt=""
+          class="avatar"
+          id="w12"
+        />
+      </div>
+    </div>
+
+    <div id="myMap" style="width: 100vw; height: 100vh"></div>
+
+    <div class="input">
+      <textarea id="text" cols="20" rows="4"></textarea>
+      <button id="send">端る</button>
+      <button id="leave">去る</button>
+    </div>
+
+    <div class="container-wrapper">
+      <div class="container"></div>
+    </div>
+
+    <!-- 以下、JavaScript 領域 -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+      import {
+        getDatabase,
+        ref,
+        push,
+        set,
+        onChildAdded,
+        remove,
+        onChildRemoved,
+        get,
+        update,
+        onChildChanged,
+      } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+
+
+
+
+
+
+
+        
+      };
+
+      // Firebase Realtime DB に接続
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+      let dbRef = ref(db, "chat"); // Realtime DB の chat を使う
+
+      // 初期化
+      let img_id;
+      let img_path;
+      let mykey;
+
+      $(".init").hide();
+      $("#myMap").hide();
+      $(".input").hide();
+      $(".container").hide();
+
+      // アバター選択・記録
+      $(".avatar").on("click", function () {
+        img_id = $(this).attr("id");
+        img_path = $(this).attr("src");
+
+        const msg = {
+          type: "person",
+          date: Date(),
+          pid: img_id,
+          img: img_path,
+          lat_ido: lat_ido,
+          lon_ido: lon_ido,
+          lat_me: lat_me,
+          lon_me: lon_me,
+          text: "",
+        };
+        console.log(msg);
+        const newPostRef = push(dbRef);
+        set(newPostRef, msg);
+
+        // 表示切り替え
+        console.log(img_id, img_path);
+        $(".init").fadeOut(500);
+        $("#myMap").fadeIn(1500);
+        $(".input").fadeIn(1500);
+        $(".container").fadeIn(1500);
+      });
+
+      // コメントを db に投稿
+      $("#send").on("click", function () {
+        let text = $("#text").val();
+        text = text.replace(/\n/g, "<br>");
+
+        const msg = {
+          type: "message",
+          date: Date(),
+          pid: img_id,
+          img: img_path,
+          lat_ido: lat_ido,
+          lon_ido: lon_ido,
+          lat_me: lat_me,
+          lon_me: lon_me,
+          text: text,
+        };
+        console.log(msg);
+        const newPostRef = push(dbRef);
+        set(newPostRef, msg);
+
+        $("#text").val("");
+      });
+
+      // 人物、井戸、自分の井戸のメッセージを画面に表示
+      setTimeout(function () {
+        onChildAdded(dbRef, function (data) {
+          const msg = data.val();
+          const key = data.key;
+          // console.log("msg=", msg);
+
+          if (msg.type === "person") {
+            mapPushpin(map, msg.lat_me, msg.lon_me, msg.img, 0, 0);
+            mapPushpin(
+              map,
+              msg.lat_ido,
+              msg.lon_ido,
+              "image/ido_kurumaido.png",
+              8,
+              8
+            );
+          } else if (
+            msg.lat_ido === lat_ido &&
+            msg.lon_ido === lon_ido &&
+            msg.text != ""
+          ) {
+            let html = "";
+            html = `
+              <div class=${key}>
+                <p class="comment">${msg.text}</p>
+              </div>
+            `;
+            let container = $(".container");
+            container.append(html);
+          }
+        });
+      }, 8000);
+    </script>
+    <script src="js/map.js"></script>
+    <script src="js/chat.js"></script>
+    <script
+      src="https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AlA_wWmDq6XGusZi013gjk7RqViYPAU2gsbcoYc9TilhoGqBMZAvZl2-ySPbpD2m"
+      async
+      defer
+    ></script>
+  </body>
+</html>
