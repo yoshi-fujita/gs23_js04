@@ -55,10 +55,10 @@ a:visited{
 
 .container p{
     margin: 1px;
-    padding: 1px;
-    border-radius: 3px;
+    padding: 1px 5px;
+    border-radius: 5px;
     border: 1px solid #222;
     line-height: 1.2;
     background-color: #fff;
-    font-size: 10px;
+    font-size: 12px;
 }
